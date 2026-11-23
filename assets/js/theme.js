@@ -24,6 +24,7 @@
     dark: '<svg viewBox="0 0 16 16" width="16" height="16" aria-hidden="true"><path d="M13.6 10.2A6 6 0 0 1 5.8 2.4a6 6 0 1 0 7.8 7.8Z" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/></svg>'
   };
   var LABELS = { system: 'System', light: 'Light', dark: 'Dark' };
+  function label(k) { return window.PWI18N ? window.PWI18N.t('theme.' + k, LABELS[k]) : LABELS[k]; }
 
   function mount() {
     var nav = document.querySelector('.nav-inner');
@@ -34,7 +35,7 @@
       '<button type="button" class="theme-btn" aria-haspopup="true" aria-expanded="false"></button>' +
       '<div class="theme-menu" role="menu" hidden>' +
       ['system', 'light', 'dark'].map(function (k) {
-        return '<button type="button" role="menuitemradio" data-theme-choice="' + k + '">' + ICONS[k] + '<span>' + LABELS[k] + '</span></button>';
+        return '<button type="button" role="menuitemradio" data-theme-choice="' + k + '">' + ICONS[k] + '<span>' + label(k) + '</span></button>';
       }).join('') + '</div>';
     nav.appendChild(wrap);
     var btn = wrap.querySelector('.theme-btn');
@@ -43,12 +44,18 @@
     function render() {
       var c = saved();
       btn.innerHTML = ICONS[isDark(c) ? 'dark' : 'light'];
-      btn.setAttribute('aria-label', 'Theme: ' + LABELS[c]);
-      btn.title = 'Theme: ' + LABELS[c];
+      var text = window.PWI18N
+        ? window.PWI18N.t('theme.aria', 'Theme: {label}', { label: label(c) })
+        : 'Theme: ' + LABELS[c];
+      btn.setAttribute('aria-label', text);
+      btn.title = text;
       menu.querySelectorAll('[data-theme-choice]').forEach(function (b) {
         b.setAttribute('aria-checked', String(b.getAttribute('data-theme-choice') === c));
+        var span = b.querySelector('span');
+        if (span) span.textContent = label(b.getAttribute('data-theme-choice'));
       });
     }
+    document.addEventListener('pw:lang', render);
     function open(v) {
       menu.hidden = !v;
       btn.setAttribute('aria-expanded', String(v));

@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Board · PortWatch VI</title>
+  <title data-i18n="board.pageTitle">Board · PortWatch VI</title>
   <meta name="description" content="Anonymous discussion boards for the GTA VI on PC port efforts.">
   <link rel="canonical" href="https://byte-port57.github.io/portwatch-vi-cn/board.html">
   <meta property="og:site_name" content="PortWatch VI">
@@ -21,13 +21,14 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Inter+Tight:wght@600;700;800;900&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="assets/css/style.css">
+  <script src="assets/js/i18n.js"></script>
   <script src="assets/js/theme.js"></script>
   <script type="module" src="assets/js/board.js"></script>
 </head>
 <body class="page-board">
   <header class="nav is-scrolled" id="nav">
     <div class="wrap nav-inner">
-      <a class="brand" href="./" aria-label="PortWatch VI home">
+      <a class="brand" href="./" aria-label="PortWatch VI home" data-i18n-attr="aria-label:nav.home">
         <svg class="brand-mark" viewBox="0 0 32 32" aria-hidden="true">
           <defs><linearGradient id="bm" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#7a5cff"/><stop offset=".55" stop-color="#ff2e7e"/><stop offset="1" stop-color="#ff8a3d"/></linearGradient></defs>
           <circle cx="16" cy="16" r="12" fill="none" stroke="#eceef3" stroke-width="5"/>
@@ -35,12 +36,12 @@
         </svg>
         <span>PortWatch<b>VI</b></span>
       </a>
-      <nav class="nav-links" aria-label="Sections">
-        <a href="./#race">Race</a>
-        <a href="./#news">News</a>
-        <a href="board.html" class="is-current">Board</a>
-        <a href="./#method">Scoring</a>
-        <a href="./#safety" class="nav-warn">Fake downloads</a>
+      <nav class="nav-links" aria-label="Sections" data-i18n-attr="aria-label:nav.sections">
+        <a href="./#race" data-i18n="nav.race">Race</a>
+        <a href="./#news" data-i18n="nav.news">News</a>
+        <a href="board.html" class="is-current" data-i18n="nav.board">Board</a>
+        <a href="./#method" data-i18n="nav.scoring">Scoring</a>
+        <a href="./#safety" class="nav-warn" data-i18n="nav.fake">Fake downloads</a>
       </nav>
     </div>
   </header>
@@ -48,25 +49,25 @@
   <main class="wrap board-page">
     <div class="board-head">
       <div>
-        <p class="kicker">Anonymous discussion</p>
-        <h1>Board</h1>
-        <p class="sub">Talk about the efforts, share what you've tested, ask questions. No account needed.</p>
+        <p class="kicker" data-i18n="board.kicker">Anonymous discussion</p>
+        <h1 data-i18n="board.title">Board</h1>
+        <p class="sub" data-i18n="board.sub">Talk about the efforts, share what you've tested, ask questions. No account needed.</p>
       </div>
       <aside class="board-rules">
-        <b>House rules</b>
+        <b data-i18n="board.rules">House rules</b>
         <ul>
-          <li><b>No download links.</b> Posts with any link wait for review before they appear.</li>
-          <li>Never post game files, keys or "working exe" offers. They're scams.</li>
-          <li>Don't share personal info, yours or anyone else's.</li>
-          <li>Tips about real progress are welcome. We read the board when updating the tracker.</li>
+          <li><b data-i18n="board.rule1b">No download links.</b> <span data-i18n="board.rule1">Posts with any link wait for review before they appear.</span></li>
+          <li data-i18n="board.rule2">Never post game files, keys or "working exe" offers. They're scams.</li>
+          <li data-i18n="board.rule3">Don't share personal info, yours or anyone else's.</li>
+          <li data-i18n="board.rule4">Tips about real progress are welcome. We read the board when updating the tracker.</li>
         </ul>
       </aside>
     </div>
 
     <div class="board-layout">
-      <nav class="board-nav" id="board-nav" aria-label="Boards"></nav>
+      <nav class="board-nav" id="board-nav" aria-label="Boards" data-i18n-attr="aria-label:board.navAria"></nav>
       <section class="board-main" id="board-main" aria-live="polite">
-        <p class="empty">Loading…</p>
+        <p class="empty" data-i18n="board.loading">Loading…</p>
       </section>
     </div>
   </main>
@@ -75,9 +76,9 @@
     <div class="wrap footer-inner">
       <div>
         <a class="brand brand-sm" href="./"><span>PortWatch<b>VI</b></span></a>
-        <p>Fan-made tracker. Not affiliated with or endorsed by Rockstar Games, Take-Two or Microsoft. Posts are anonymous and are the views of their authors. Page views are counted anonymously, with no cookies and no IP addresses stored.</p>
+        <p data-i18n="board.footer">Fan-made tracker. Not affiliated with or endorsed by Rockstar Games, Take-Two or Microsoft. Posts are anonymous and are the views of their authors. Page views are counted anonymously, with no cookies and no IP addresses stored.</p>
       </div>
-      <div class="footer-meta"><p><a href="./">Back to the tracker</a></p></div>
+      <div class="footer-meta"><p><a href="./" data-i18n="board.backToTracker">Back to the tracker</a></p></div>
     </div>
   </footer>
 </body>

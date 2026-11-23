@@ -60,6 +60,10 @@ Scoring is in `assets/js/scoring.js`, shared by the site and the scout. Groundwo
 
 The hero shows an original sunset illustration until you add a photo. To use official GTA VI artwork, download a wallpaper or artwork image from Rockstar's official GTA VI site and save it as `assets/img/hero.jpg`, ideally about 2400px wide. The site finds it automatically and shows the credit line from `site.heroCredit`.
 
+## Language
+
+The site runs in Chinese by default and switches to English from the 中文/EN button in the navigation bar (next to the theme picker). The choice is stored in `localStorage` under `pw-lang`, and `?lang=en` or `?lang=zh` on any URL forces one for a link you want to share. Interface copy lives in `assets/js/i18n.js`; text that comes from `data/tracker.json` (project notes, news bodies) stays in the language the scout wrote it in.
+
 ## Local preview
 
 Any static server works. On Windows without Node or Python:
