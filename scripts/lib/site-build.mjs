@@ -5,7 +5,7 @@
 
 import { esc, NEWS_ID_RE, articlePath, coverHtml } from '../../assets/js/news-shared.js';
 
-export const SITE_URL = 'https://alex18221722613-rgb.github.io/portwatch-vi-cn/';
+export const SITE_URL = 'https://byte-port57.github.io/portwatch-vi-cn/';
 const SITE_NAME = 'PortWatch VI';
 const SOCIAL_IMAGE = `${SITE_URL}assets/img/social.jpg`;
 // IndexNow lets Bing, Yandex and others know a URL changed, without an account. The key is public by
