@@ -1,5 +1,5 @@
 {
-  "updated": "2026-11-23T07:50:10.353Z",
+  "updated": "2026-11-23T08:12:05.090Z",
   "site": {
     "title": "PortWatch VI",
     "heroImage": "assets/img/hero.jpg",
@@ -312,9 +312,9 @@
         "drycheetah84/TomBox"
       ],
       "stats": {
-        "stars": 1410,
+        "stars": 1415,
         "forks": 86,
-        "openIssues": 51,
+        "openIssues": 61,
         "createdAt": "2026-11-21T08:08:39Z",
         "pushedAt": "2026-11-23T07:49:24Z",
         "commits7d": 100,
@@ -363,7 +363,7 @@
       },
       "verification": "self-reported",
       "stats": {
-        "stars": 345,
+        "stars": 347,
         "forks": 21,
         "openIssues": 42,
         "createdAt": "2026-11-20T20:03:21Z",
@@ -414,7 +414,7 @@
       },
       "verification": "self-reported",
       "stats": {
-        "stars": 181,
+        "stars": 182,
         "forks": 19,
         "openIssues": 28,
         "createdAt": "2026-11-20T06:54:47Z",
@@ -465,7 +465,7 @@
       },
       "verification": "self-reported",
       "stats": {
-        "stars": 17,
+        "stars": 18,
         "forks": 0,
         "openIssues": 0,
         "createdAt": "2026-11-21T12:07:28Z",
@@ -519,8 +519,8 @@
         "boykopovar/AnyPS5"
       ],
       "stats": {
-        "stars": 536,
-        "forks": 84,
+        "stars": 539,
+        "forks": 85,
         "openIssues": 19,
         "createdAt": "2026-11-20T15:33:20Z",
         "pushedAt": "2026-11-22T17:34:04Z",
@@ -570,9 +570,9 @@
       },
       "verification": "self-reported",
       "stats": {
-        "stars": 17308,
-        "forks": 1472,
-        "openIssues": 1711,
+        "stars": 17423,
+        "forks": 1487,
+        "openIssues": 1747,
         "createdAt": "2026-11-20T20:07:13Z",
         "pushedAt": "2026-11-23T06:20:06Z",
         "commits7d": 100,
@@ -622,11 +622,11 @@
       },
       "verification": "self-reported",
       "stats": {
-        "stars": 22,
+        "stars": 23,
         "forks": 6,
         "openIssues": 0,
         "createdAt": "2026-11-21T14:35:25Z",
-        "pushedAt": "2026-11-23T06:25:35Z",
+        "pushedAt": "2026-11-23T07:57:25Z",
         "commits7d": 100,
         "archived": false,
         "missing": false
@@ -671,7 +671,7 @@
       },
       "verification": "self-reported",
       "stats": {
-        "stars": 24,
+        "stars": 25,
         "forks": 2,
         "openIssues": 1,
         "createdAt": "2026-11-20T23:54:18Z",
@@ -722,18 +722,18 @@
       },
       "verification": "self-reported",
       "stats": {
-        "stars": 1363,
+        "stars": 1365,
         "forks": 134,
-        "openIssues": 81,
+        "openIssues": 76,
         "createdAt": "2026-11-20T17:43:52Z",
-        "pushedAt": "2026-11-23T07:44:32Z",
+        "pushedAt": "2026-11-23T08:11:23Z",
         "commits7d": 100,
         "archived": false,
         "missing": false
       },
       "assessedAt": "2026-11-23",
       "assessedBy": "claude",
-      "readmeSha": "34966ee17478f0e41554f10465f65309f1f8384f3d1d15410c3258a68c4ad782",
+      "readmeSha": "cfe8229366fced26127b37952c23900efed73d458402e7240c0c03fb29b6fca6",
       "claims": [],
       "readmeChangedAt": "2026-11-23"
     },
@@ -823,11 +823,11 @@
       },
       "verification": "self-reported",
       "stats": {
-        "stars": 137,
+        "stars": 138,
         "forks": 4,
-        "openIssues": 2,
+        "openIssues": 3,
         "createdAt": "2026-11-20T00:25:27Z",
-        "pushedAt": "2026-11-23T07:13:48Z",
+        "pushedAt": "2026-11-23T07:59:24Z",
         "commits7d": 100,
         "archived": false,
         "missing": false
@@ -835,7 +835,7 @@
       "assessedAt": "2026-11-23",
       "assessedBy": "claude",
       "claims": [],
-      "readmeSha": "efd30d0f1bec3ca2be515a96487a7cd5ed8eacf9cb53bc16f5f2f1a008fc1e65",
+      "readmeSha": "54183932052295855e80bf2b061e6c90e318964d730233c796db145b7e9689e0",
       "readmeChangedAt": "2026-11-23"
     },
     {
@@ -870,7 +870,7 @@
       },
       "verification": "self-reported",
       "stats": {
-        "stars": 37,
+        "stars": 38,
         "forks": 4,
         "openIssues": 3,
         "createdAt": "2026-11-19T20:32:01Z",
@@ -1062,7 +1062,7 @@
       },
       "verification": "self-reported",
       "stats": {
-        "stars": 14,
+        "stars": 15,
         "forks": 1,
         "openIssues": 2,
         "createdAt": "2026-11-21T16:49:38Z",
@@ -1258,8 +1258,8 @@
         "forks": 0,
         "openIssues": 0,
         "createdAt": "2026-11-22T14:40:55Z",
-        "pushedAt": "2026-11-23T07:29:03Z",
-        "commits7d": 87,
+        "pushedAt": "2026-11-23T07:51:21Z",
+        "commits7d": 88,
         "archived": false,
         "missing": false
       },
@@ -1355,15 +1355,16 @@
         "forks": 0,
         "openIssues": 0,
         "createdAt": "2026-11-23T02:45:46Z",
-        "pushedAt": "2026-11-23T06:04:16Z",
-        "commits7d": 6,
+        "pushedAt": "2026-11-23T08:04:22Z",
+        "commits7d": 8,
         "archived": false,
         "missing": false
       },
       "assessedAt": "2026-11-23",
       "assessedBy": "claude",
       "claims": [],
-      "readmeSha": "062aee28ae9e63f056ac408a97a0cef69ae8ff9ad8c4b73107e35c64bc824bba"
+      "readmeSha": "3cb2faf237744c8be1a0752e4a022e73d42f3486a42152652e9a4f0c32f04310",
+      "readmeChangedAt": "2026-11-23"
     }
   ],
   "tools": [
@@ -1393,7 +1394,7 @@
       "kind": "Archive explorer",
       "desc": "Fast Rust RPF9 explorer with a Bink2 player and ADAT Opus audio decoder.",
       "stats": {
-        "stars": 84,
+        "stars": 85,
         "pushedAt": "2026-11-22T21:40:20Z"
       }
     },
@@ -1454,7 +1455,7 @@
       "kind": "Curated list",
       "desc": "Running list of open-source GTA VI reverse-engineering tools and layers.",
       "stats": {
-        "stars": 250,
+        "stars": 252,
         "pushedAt": "2026-11-23T01:25:59Z"
       }
     },
@@ -3077,6 +3078,13 @@
       "pushedAt": "2026-11-23T02:54:14Z"
     },
     {
+      "repo": "ioma8/ghidra-decompile-skill",
+      "reason": "off-topic (not about GTA VI or Xbox Series)",
+      "auto": true,
+      "seenAt": "2026-11-23",
+      "pushedAt": "2026-11-18T22:44:27Z"
+    },
+    {
       "repo": "DinosaurPlanetRecomp/dino-recomp",
       "reason": "off-topic (not about GTA VI or Xbox Series)",
       "auto": true,
@@ -3411,9 +3419,9 @@
       "xbox series emulator"
     ],
     "x": "(\"gta 6\" OR \"gta vi\" OR gta6) (recomp OR emulator OR \"pc port\" OR scarlett) github.com -is:retweet",
-    "lastRun": "2026-11-23T07:50:10.353Z",
-    "lastSummary": "22 refreshed, 7 READMEs changed, 1 new candidates, 1 flagged.",
-    "lastDmcaCheck": "2026-11-23T07:50:10.353Z",
+    "lastRun": "2026-11-23T08:12:05.090Z",
+    "lastSummary": "22 refreshed, 3 READMEs changed, 0 new candidates, 0 flagged.",
+    "lastDmcaCheck": "2026-11-23T08:12:05.090Z",
     "lastEditorRun": "2026-11-23T07:43:30.000Z"
   },
   "headlines": [
@@ -3523,6 +3531,13 @@
       "via": "Google News"
     },
     {
+      "title": "Creators Report YouTube Copyright Claims With GTA 6’s Music Mute On",
+      "outlet": "GTA BOOM",
+      "link": "https://news.google.com/rss/articles/CBMipgFBVV95cUxNUHhXRFl4dEFHQmdFcDlJeUZta2NqWmVldVpXTkZUWHJ0Q0NXUHo4R25aUDd2T2pKZC11aTJrMGp4cGpHYTc0U1R5WWt4WXQtQmF3bFdqSkI0bm9SUFd4RGZWdzM2YWowbXFhbEpGN012UXJyUF9KRHlwT1p3ZU5WVWc2ZlVUZlhIUjRZRTlNSWhxU2U5MUJCSVd0RXVQNjZEV0kwdV9R?oc=5",
+      "date": "2026-11-22T19:58:45.000Z",
+      "via": "Google News"
+    },
+    {
       "title": "GTA 6 Creators Report YouTube Claims Even With Licensed Music Muted",
       "outlet": "GTA BOOM",
       "link": "https://news.google.com/rss/articles/CBMipgFBVV95cUxNUHhXRFl4dEFHQmdFcDlJeUZta2NqWmVldVpXTkZUWHJ0Q0NXUHo4R25aUDd2T2pKZC11aTJrMGp4cGpHYTc0U1R5WWt4WXQtQmF3bFdqSkI0bm9SUFd4RGZWdzM2YWowbXFhbEpGN012UXJyUF9KRHlwT1p3ZU5WVWc2ZlVUZlhIUjRZRTlNSWhxU2U5MUJCSVd0RXVQNjZEV0kwdV9R?oc=5",
@@ -3618,13 +3633,6 @@
       "outlet": "The Economic Times",
       "link": "https://news.google.com/rss/articles/CBMi_AFBVV95cUxOU2dHTWp1STdGLW85SzV1bHRHd1I3UFZrTTNGVzltWTRCSzI3dFRVMnY3QUR0ckVKVHU3SU52MFBvZGhCRENRS0ZvQ0Y5clBBZE1LQ0pDMzliSi1ZQWhwakQtTjE3MGI5LTlGZHFLZVVrLXlISGEweFh5TEVTOFVjRVI4d2o0NnU0cm1ZUlYwUFBzU0lKZGN5alh5MEZ4NHRsemNBMzl2U3dwcjQ3OWJNYVZ2Nm10NTMybXc2RTlYaGQ2YXFhUXA4UlJEWkFDM1FEeHFsODMzQUhPUUQyLVBUUm8ybWc1NTdkRDhvck4xWllRRFNwVzZtQmRfTFnSAYICQVVfeXFMT19Xck1TTmRIVHpmQlpDRGpLLVNCRkM3ZDdSS3l3Sy1IbmdRZ094V2hvNTI5Q19IMWpWSmpVQnJlcTN4ZEhEV1c2M1M5OVBoWEMwdWtubFFHMGtyeUtfampyM19GRnBGU0htM2g0SWJ6YkR1dHpDdmpINUtCMVZrQVB6LVlOUUtaRlVUeC1hTXFMTG5mQnBoX0RsYUNaVmpGNjV3TWtEMndKeGpYZWdRZ2lnY21TeUNLa3gyVkN6QWFqZm56anl2UGFYWUk4U2o3OTQxaUdmdmFNRlJITXc0bmJ6bFBNN25yeXAyV0tRT1VLUWhCcDlWN2JsRVB3enkxaVRB?oc=5",
       "date": "2026-11-22T11:32:06.000Z",
-      "via": "Google News"
-    },
-    {
-      "title": "GTA 6 PC Version Release Date Update Suggests It's Closer Than We Thought",
-      "outlet": "ScreenRant",
-      "link": "https://news.google.com/rss/articles/CBMidEFVX3lxTE84Z3NZVEI0cWJHSmw1T3RpSXdaU285U0NJX3dMNEdiZURnNXFWYlp1YWE5WGwyRGFvVnlkRnNpSmNWT2Y2clJpdnkyVVM4TlIybXZhOGZPWWl5MHZwMlpvU2tNcEtrUzMwLVlWcmJnTVMwYXBS?oc=5",
-      "date": "2026-11-22T11:30:18.000Z",
       "via": "Google News"
     }
   ],
