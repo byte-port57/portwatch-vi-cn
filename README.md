@@ -62,7 +62,9 @@ The hero shows an original sunset illustration until you add a photo. To use off
 
 ## Language
 
-The site runs in Chinese by default and switches to English from the 中文/EN button in the navigation bar (next to the theme picker). The choice is stored in `localStorage` under `pw-lang`, and `?lang=en` or `?lang=zh` on any URL forces one for a link you want to share. Interface copy lives in `assets/js/i18n.js`; text that comes from `data/tracker.json` (project notes, news bodies) stays in the language the scout wrote it in.
+The site runs in Chinese by default and switches to English from the 中文/EN button in the navigation bar (next to the theme picker). The choice is stored in `localStorage` under `pw-lang`, and `?lang=en` or `?lang=zh` on any URL forces one for a link you want to share.
+
+Interface copy lives in `assets/js/i18n.js`. Text that comes from `data/tracker.json` — project summaries, highlights, blockers, news headlines and bodies, the change feed, tools and flags — is translated by `assets/js/i18n-content.js`, which is loaded by the tracker, the board and every generated article page. Add a `"English text": "中文"` entry there whenever the scout writes a new phrase; strings without an entry fall back to the original English. The "Scout spotted …" change lines are translated from a template, so they need no entries. User-written board posts are never translated.
 
 ## Local preview
 

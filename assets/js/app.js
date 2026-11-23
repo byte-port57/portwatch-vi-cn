@@ -25,6 +25,9 @@ const msDesc = (m) => (I ? I.milestoneDesc(m.key, m.desc) : m.desc);
 const gwLabel = (g) => (I ? I.groundwork(g.key, g.label) : g.label);
 const gwDesc = (g) => (I ? I.groundworkDesc(g.key, g.desc) : g.desc);
 const stLabel = (k) => (I ? I.stability(k, (STABILITY[k] || STABILITY.unknown).label) : (STABILITY[k] || STABILITY.unknown).label);
+// tracker.json is written in English; translate its human-readable fields on the way to the DOM.
+const D = (s) => (window.PWCONTENT ? window.PWCONTENT.text(s) : s);
+const DC = (s) => (window.PWCONTENT ? window.PWCONTENT.change(s) : s);
 
 function ago(iso) {
   const t0 = Date.parse(iso);
@@ -103,7 +106,7 @@ function renderHeroArt(site) {
   img.onload = () => {
     $('#hero-photo').style.backgroundImage = `url("${encodeURI(site.heroImage)}")`;
     $('#top').classList.add('has-photo');
-    if (site.heroCredit) $('#art-credit').textContent = site.heroCredit;
+    if (site.heroCredit) $('#art-credit').textContent = D(site.heroCredit);
   };
   img.src = site.heroImage;
 }
@@ -259,7 +262,7 @@ function drawMarkers(ranked, leader) {
       const e = it.r.effort;
       const src = avatar(e.repo);
       return `<a class="marker ${e === leader ? 'is-leader' : ''}" href="#effort-${esc(e.id)}" style="left:${it.a}px;bottom:${H - avatarY - 32}px"
-                data-tip-title="${esc(e.name)} · ${pct(it.r.score)}%" data-tip="${esc(msLabel(MILESTONES.find((m) => m.key === it.r.reached) || MILESTONES[0]))} · ${esc(e.approach || '')}">
+                data-tip-title="${esc(e.name)} · ${pct(it.r.score)}%" data-tip="${esc(msLabel(MILESTONES.find((m) => m.key === it.r.reached) || MILESTONES[0]))} · ${esc(D(e.approach || ''))}">
                 <span class="mk-name">${esc(e.name)} · ${pct(it.r.score)}%</span>
                 ${src ? `<img src="${esc(src)}" alt="" loading="lazy" data-fallback="${esc(e.name.slice(0, 2))}">` : `<span class="mk-fallback">${esc(e.name.slice(0, 2))}</span>`}
               </a>`;
@@ -290,7 +293,7 @@ function renderChanges(changes) {
   const items = [...changes].reverse().slice(0, 12);
   if (!items.length) { $('#changes').hidden = true; return; }
   const cls = { up: 'ck-up', down: 'ck-down', flag: 'ck-flag', new: 'ck-new', removed: 'ck-down', claim: 'ck-flag' };
-  list.innerHTML = items.map((c) => `<li><span class="ck ${cls[c.kind] || ''}"></span><time>${esc(new Date(`${c.date}T12:00:00Z`).toLocaleDateString(dateLocale(), { day: 'numeric', month: 'short' }))}</time><span>${esc(c.text)}</span></li>`).join('');
+  list.innerHTML = items.map((c) => `<li><span class="ck ${cls[c.kind] || ''}"></span><time>${esc(new Date(`${c.date}T12:00:00Z`).toLocaleDateString(dateLocale(), { day: 'numeric', month: 'short' }))}</time><span>${esc(DC(c.text))}</span></li>`).join('');
 }
 
 /* ---------- Race ---------- */
@@ -338,12 +341,12 @@ function effortCard(e, rank, open) {
   const ticks = MILESTONES.slice(1, -1).map((m) => `<i style="left:${m.at}%"></i>`).join('');
   const stale = st.pushedAt && daysSince(st.pushedAt) > 3;
   const tags = [
-    e.approach && `<span class="tag">${esc(e.approach)}</span>`,
-    e.target && `<span class="tag ${isGtaSpecific(e) ? 'tag-gta' : ''}">${esc(e.target)}</span>`,
+    e.approach && `<span class="tag">${esc(D(e.approach))}</span>`,
+    e.target && `<span class="tag ${isGtaSpecific(e) ? 'tag-gta' : ''}">${esc(D(e.target))}</span>`,
     e.verification === 'reproduced'
       ? `<span class="tag tag-ok">${esc(t('e.reproduced', 'Independently reproduced'))}</span>`
       : `<span class="tag tag-self" title="${esc(t('e.selfTitle', "Based on the project's own README; not yet reproduced by others"))}">${esc(t('e.selfReported', 'Self-reported'))}</span>`,
-    e.provenOn && ladderValue(e.groundwork?.proven) > 0 && `<span class="tag tag-proven" title="${esc(t('e.runsTitle', 'Runs another game'))}">${esc(t('e.runs', 'Runs: {x}', { x: e.provenOn }))}</span>`,
+    e.provenOn && ladderValue(e.groundwork?.proven) > 0 && `<span class="tag tag-proven" title="${esc(t('e.runsTitle', 'Runs another game'))}">${esc(t('e.runs', 'Runs: {x}', { x: D(e.provenOn) }))}</span>`,
     stale && `<span class="tag tag-stale">${esc(t('e.quiet', 'Quiet for {n}d', { n: Math.floor(daysSince(st.pushedAt)) }))}</span>`,
     st.missing && `<span class="tag tag-stale">${esc(t('e.repoGone', 'Repo gone (404)'))}</span>`,
     st.dmca && `<a class="tag tag-stale" href="${esc(safeHttp(st.dmca.url))}" target="_blank" rel="noopener" title="${esc(t('e.dmcaTitle', "Named in a DMCA notice in GitHub's public log"))}">${esc(t('e.dmca', 'DMCA notice {date}', { date: st.dmca.date || '' }))}</a>`,
@@ -354,7 +357,7 @@ function effortCard(e, rank, open) {
   }).join('');
   const claims = (e.claims || []).slice(0, 2).map((c) => {
     const m = MILESTONES.find((x) => x.key === c.milestone) || { key: c.milestone, label: c.milestone };
-    return `<div class="claim"><b>${esc(t('e.claimPre', 'Unverified claim in README:'))}</b> “${esc(c.text)}”${esc(t('e.claimMid', ', which may mean '))}<em>${esc(msLabel(m))}</em>${esc(t('e.claimEnd', '. Awaiting review.'))}</div>`;
+    return `<div class="claim"><b>${esc(t('e.claimPre', 'Unverified claim in README:'))}</b> “${esc(D(c.text))}”${esc(t('e.claimMid', ', which may mean '))}<em>${esc(msLabel(m))}</em>${esc(t('e.claimEnd', '. Awaiting review.'))}</div>`;
   }).join('');
   const src = avatar(e.repo);
   return `
@@ -370,7 +373,7 @@ function effortCard(e, rank, open) {
         <div class="e-score"><b>${pct(s.score)}<span>%</span></b><small>${esc(msLabel(MILESTONES.find((m) => m.key === s.reached) || MILESTONES[0]))}</small></div>
       </div>
       <div class="tags">${tags}</div>
-      <p class="e-summary">${esc(e.summary)}</p>
+      <p class="e-summary">${esc(D(e.summary))}</p>
       <div class="bar" aria-label="${esc(t('e.progressAria', '{name} progress {p} percent', { name: e.name, p: pct(s.score) }))}">
         <div class="bar-track"><div class="bar-fill" data-width="${s.score}"></div><div class="bar-ticks">${ticks}</div></div>
         <div class="ladder">${ladderCells(e)}</div>
@@ -380,11 +383,11 @@ function effortCard(e, rank, open) {
         <div class="gw">
           <h4>${esc(t('e.gwBreakdown', 'Groundwork breakdown'))}</h4>
           ${gwRows}
-          ${e.provenOn ? `<p class="gw-proven">${esc(t('e.provenOn', 'Proven on: {x}', { x: e.provenOn }))}</p>` : ''}
+          ${e.provenOn ? `<p class="gw-proven">${esc(t('e.provenOn', 'Proven on: {x}', { x: D(e.provenOn) }))}</p>` : ''}
         </div>
         <div class="notes">
-          <div class="works"><h4>${esc(t('e.whatWorks', 'What works'))}</h4><ul>${(e.highlights || []).map((h) => `<li>${esc(h)}</li>`).join('')}</ul></div>
-          <div class="blocks"><h4>${esc(t('e.whatBlocking', "What's blocking"))}</h4><ul>${(e.blockers || []).map((h) => `<li>${esc(h)}</li>`).join('')}</ul></div>
+          <div class="works"><h4>${esc(t('e.whatWorks', 'What works'))}</h4><ul>${(e.highlights || []).map((h) => `<li>${esc(D(h))}</li>`).join('')}</ul></div>
+          <div class="blocks"><h4>${esc(t('e.whatBlocking', "What's blocking"))}</h4><ul>${(e.blockers || []).map((h) => `<li>${esc(D(h))}</li>`).join('')}</ul></div>
         </div>
       </div>
       <div class="e-foot">
@@ -411,8 +414,8 @@ function renderWatchlist(data) {
     <div class="w-row w-head" role="row"><span>${esc(t('watch.project', 'Project'))}</span><span>${esc(t('watch.approach', 'Approach'))}</span><span>${esc(t('watch.progress', 'Progress'))}</span><span>${esc(t('watch.stars', 'Stars'))}</span><span>${esc(t('watch.lastPush', 'Last push'))}</span></div>` +
     rows.map((e) => `
     <div class="w-row" role="row" id="effort-${esc(e.id)}">
-      <div class="w-name"><a href="${esc(repoUrl(e.repo, e.branch))}" target="_blank" rel="noopener">${esc(e.name)}</a><p>${esc(e.summary)}</p></div>
-      <span class="w-muted">${esc(e.approach)}${e.target && /gta|ps5/i.test(e.target) ? ` · ${esc(e.target)}` : ''}</span>
+      <div class="w-name"><a href="${esc(repoUrl(e.repo, e.branch))}" target="_blank" rel="noopener">${esc(e.name)}</a><p>${esc(D(e.summary))}</p></div>
+      <span class="w-muted">${esc(D(e.approach))}${e.target && /gta|ps5/i.test(e.target) ? ` · ${esc(D(e.target))}` : ''}</span>
       <div class="w-bar"><div class="bar-track"><div class="bar-fill" data-width="${e._s.score}"></div></div><b>${pct(e._s.score)}%</b></div>
       <span class="w-muted">★ ${fmtK(e.stats?.stars)}</span>
       <span class="w-muted">${esc(ago(e.stats?.pushedAt))}</span>
@@ -423,9 +426,9 @@ function renderWatchlist(data) {
 function renderTools(tools) {
   $('#tools-list').innerHTML = tools.map((tool) => `
     <a class="tool" href="${esc(repoUrl(tool.repo))}" target="_blank" rel="noopener">
-      <span class="t-kind">${esc(tool.kind)}</span>
-      <h3>${esc(tool.name)}</h3>
-      <p>${esc(tool.desc)}</p>
+      <span class="t-kind">${esc(D(tool.kind))}</span>
+      <h3>${esc(D(tool.name))}</h3>
+      <p>${esc(D(tool.desc))}</p>
       <span class="t-meta">★ ${fmtK(tool.stats?.stars)} · ${esc(t('tool.pushed', 'pushed {ago}', { ago: ago(tool.stats?.pushedAt) }))}</span>
     </a>`).join('');
 }
@@ -442,12 +445,12 @@ function renderInbox(data) {
     <div class="cand">
       <div>
         <b>${esc(x.repo)}</b> <span class="tag tag-self">${esc(t('inbox.unreviewed', 'Unreviewed · not linked'))}</span>
-        <p>${esc(x.description || t('inbox.noDesc', 'No description'))}</p>
+        <p>${esc(D(x.description || t('inbox.noDesc', 'No description')))}</p>
         <p>${esc(t('inbox.foundVia', 'Found via {x} · {ago} · ★ {stars}', {
-          x: (x.sources || [x.source]).filter(Boolean).join(', '),
+          x: (x.sources || [x.source]).filter(Boolean).map(D).join(', '),
           ago: ago(x.foundAt),
           stars: fmtK(x.stars),
-        }))}${x.signals?.length ? esc(` · ${x.signals.slice(0, 4).join(', ')}`) : ''}</p>
+        }))}${x.signals?.length ? esc(` · ${x.signals.slice(0, 4).map(D).join(', ')}`) : ''}</p>
       </div>
       <div class="c-score"><b>${Math.round(x.substance || 0)}</b>${esc(t('inbox.substance', 'substance'))}</div>
     </div>`).join('');
@@ -479,9 +482,9 @@ function renderNews(news) {
       ${storyMedia(n)}
       <div class="story-body">
         <time>${esc(fmtDay(n.date))}</time>
-        <h3>${esc(n.title)}</h3>
-        <p>${esc(n.dek)}</p>
-        ${!small && n.image?.credit ? `<span class="story-credit">${esc(t('news.image', 'Image: {credit}', { credit: n.image.credit }))}</span>` : ''}
+        <h3>${esc(D(n.title))}</h3>
+        <p>${esc(D(n.dek))}</p>
+        ${!small && n.image?.credit ? `<span class="story-credit">${esc(t('news.image', 'Image: {credit}', { credit: D(n.image.credit) }))}</span>` : ''}
       </div>
     </a>`;
   const list = $('#news-list');
@@ -492,7 +495,7 @@ function renderNews(news) {
     list.insertAdjacentHTML('afterend', `
       <div class="headlines card">
         <h3 class="mini-title">${esc(t('news.headlines', 'Latest headlines'))} <span class="w-muted">${esc(t('news.headlinesSub', "· gathered automatically from news feeds every 3 hours"))}</span></h3>
-        <ul>${heads.map((h) => `<li><a href="${esc(safeHttp(h.link))}" target="_blank" rel="noopener noreferrer">${esc(h.title)}</a><span>${esc(h.outlet)} · ${esc(ago(h.date))}</span></li>`).join('')}</ul>
+        <ul>${heads.map((h) => `<li><a href="${esc(safeHttp(h.link))}" target="_blank" rel="noopener noreferrer">${esc(D(h.title))}</a><span>${esc(h.outlet)} · ${esc(ago(h.date))}</span></li>`).join('')}</ul>
       </div>`);
   }
 
@@ -512,12 +515,12 @@ function renderNews(news) {
       ${storyMedia(n)}
       <div class="reader-inner">
         <p class="meta">${esc(catLabel(n.category))} · ${esc(fmtDay(n.date))}</p>
-        <h2 id="reader-title">${esc(n.title)}</h2>
-        <p class="dek">${esc(n.dek)}</p>
-        <div class="article">${(n.body || []).map((p) => `<p>${esc(p)}</p>`).join('')}</div>
+        <h2 id="reader-title">${esc(D(n.title))}</h2>
+        <p class="dek">${esc(D(n.dek))}</p>
+        <div class="article">${(n.body || []).map((p) => `<p>${esc(D(p))}</p>`).join('')}</div>
         <div class="sources">
           <h4>${esc(t('news.sources', 'Sources'))}</h4>
-          <ul>${(n.sources || []).map((s) => `<li><a href="${esc(safeLink(s.url))}" ${s.url?.startsWith('#') ? '' : 'target="_blank" rel="noopener"'}>${esc(s.outlet)}: ${esc(s.title)}</a></li>`).join('')}</ul>
+          <ul>${(n.sources || []).map((s) => `<li><a href="${esc(safeLink(s.url))}" ${s.url?.startsWith('#') ? '' : 'target="_blank" rel="noopener"'}>${esc(s.outlet)}: ${esc(D(s.title))}</a></li>`).join('')}</ul>
           <p class="fine">${credit ? esc(t('news.imagePre', 'Image: ')) + credit + esc(t('news.imageEnd', '. ')) : ''}${esc(n.by === 'claude' ? t('news.byClaude', 'Written automatically by Claude from the linked sources.') : t('news.bySite', 'Written by PortWatch from the linked sources.'))}${page ? ` <a href="${esc(page)}">${esc(t('news.linkArticle', 'Link to this article'))}</a>` : ''}</p>
         </div>
       </div>`;
@@ -532,7 +535,7 @@ function renderNews(news) {
 /* ---------- Safety ---------- */
 function renderFlags(flags) {
   $('#flag-list').innerHTML = flags.map((f) => `
-    <li><b>${esc(f.pattern)}<span>${esc(f.members?.length ? t('flags.seen', '{n} seen', { n: f.members.length }) : f.label || '')}</span></b><p>${esc(f.reason)}</p></li>`).join('');
+    <li><b>${esc(D(f.pattern))}<span>${esc(f.members?.length ? t('flags.seen', '{n} seen', { n: f.members.length }) : D(f.label || ''))}</span></b><p>${esc(D(f.reason))}</p></li>`).join('');
 }
 
 /* ---------- Method ---------- */

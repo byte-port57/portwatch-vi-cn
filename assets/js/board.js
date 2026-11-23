@@ -4,6 +4,7 @@ import { backendReady, getClient, trackView } from './backend.js';
 const $ = (s, r = document) => r.querySelector(s);
 const esc = (s) => String(s ?? '').replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
 const t = (key, fallback, vars) => (window.PWI18N ? window.PWI18N.t(key, fallback, vars) : (fallback ?? key));
+const D = (s) => (window.PWCONTENT ? window.PWCONTENT.text(s) : s); // tracker.json project descriptions
 const UUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
 const BOARD = /^[a-z0-9-]{1,40}$/;
 // Mirrors the database's link check, so we can tell people up front that a post will wait for review.
@@ -30,7 +31,7 @@ async function loadBoards() {
     const data = await (await fetch(`data/tracker.json?ts=${Math.floor(Date.now() / 6e4)}`)).json();
     const efforts = (data.efforts || [])
       .filter((e) => (e.tier === 'tracked' || e.tier === 'watchlist') && BOARD.test(e.id))
-      .map((e) => ({ id: e.id, name: e.name, desc: e.approach || '', effort: true, tier: e.tier }));
+      .map((e) => ({ id: e.id, name: e.name, desc: D(e.approach || ''), effort: true, tier: e.tier }));
     boards = [...fixed, ...efforts.filter((e) => e.tier === 'tracked'), ...efforts.filter((e) => e.tier === 'watchlist')];
   } catch { boards = fixed; }
 }

@@ -60,6 +60,7 @@ function shell({ title, description, canonical, ogType = 'website', image, image
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Inter+Tight:wght@600;700;800;900&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="../assets/css/style.css">
   <script src="../assets/js/i18n.js"></script>
+  <script src="../assets/js/i18n-content.js"></script>
   <script src="../assets/js/theme.js"></script>${head}
 </head>
 <body class="page-news">
@@ -106,6 +107,8 @@ ${main}
 
 // Category chips are data values ("Leak", "Port"…); the key lets the page translate them.
 const catKey = (c) => `news.cat.${String(c || '').toLowerCase()}`;
+// Story copy comes from tracker.json; mark it so i18n-content.js can swap it on a language switch.
+const dyn = (s) => ` data-i18n-text="${esc(s)}"`;
 
 // Cover art sits under the photo, so a photo that fails to load (hotlink blocked, gone) shows the cover instead.
 function media(n, cls = '') {
@@ -118,13 +121,13 @@ const card = (n, small) => `
         ${media(n)}
         <div class="story-body">
           <time datetime="${n.date}" data-datefmt="short">${esc(fmtDay(n.date))}</time>
-          <h3>${esc(n.title)}</h3>
-          <p>${esc(n.dek)}</p>
+          <h3${dyn(n.title)}>${esc(n.title)}</h3>
+          <p${dyn(n.dek)}>${esc(n.dek)}</p>
         </div>
       </a>`;
 
 function sourceItem(s) {
-  const label = `${esc(s.outlet)}${s.title ? `: ${esc(s.title)}` : ''}`;
+  const label = `${esc(s.outlet)}${s.title ? `: <span${dyn(s.title)}>${esc(s.title)}</span>` : ''}`;
   if (/^#[\w-]+$/.test(s.url || '')) return `<li><a href="../${esc(s.url)}">${label}</a></li>`;
   const url = httpsOnly(s.url);
   return url ? `<li><a href="${esc(url)}" target="_blank" rel="noopener">${label}</a></li>` : `<li>${label}</li>`;
@@ -161,10 +164,10 @@ function articlePage(n, others) {
       ${media(n)}
       <div class="reader-inner">
         <p class="meta"><span data-i18n="${catKey(n.category)}">${esc(n.category)}</span> · <time datetime="${n.date}" data-datefmt="long">${esc(fmtDay(n.date))}</time></p>
-        <h1>${esc(n.title)}</h1>
-        ${n.dek ? `<p class="dek">${esc(n.dek)}</p>` : ''}
+        <h1${dyn(n.title)}>${esc(n.title)}</h1>
+        ${n.dek ? `<p class="dek"${dyn(n.dek)}>${esc(n.dek)}</p>` : ''}
         <div class="article">
-          ${(n.body || []).map((p) => `<p>${esc(p)}</p>`).join('\n          ')}
+          ${(n.body || []).map((p) => `<p${dyn(p)}>${esc(p)}</p>`).join('\n          ')}
         </div>
         <div class="sources">
           <h2 data-i18n="news.sources">Sources</h2>
