@@ -325,6 +325,25 @@
     return hit === undefined ? raw : hit;
   }
 
+  // Markup for dynamic text so liveTranslate() can find it after rendering.
+  // The dictionary still translates known strings synchronously; unknown ones are
+  // left as English here and filled in asynchronously by PWTRANSLATE.
+  function markup(s) {
+    if (s == null) return '';
+    var raw = String(s);
+    if (!isZh()) return escapeHtml(raw);
+    var hit = ZH[raw];
+    if (hit !== undefined) return escapeHtml(hit);
+    return '<span data-live-text="' + escapeAttr(raw) + '">' + escapeHtml(raw) + '</span>';
+  }
+
+  function escapeHtml(s) {
+    return String(s).replace(/[&<>"']/g, function (c) {
+      return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c];
+    });
+  }
+  function escapeAttr(s) { return escapeHtml(s); }
+
   function change(s) {
     var raw = String(s == null ? '' : s);
     if (!isZh()) return raw;
@@ -336,15 +355,55 @@
     return text(raw);
   }
 
-  // Used by the static pages built from tracker.json.
+  // Static pages built from tracker.json mark their dynamic nodes with data-i18n-text
+  // (holding the English original). Translate from the dictionary when possible; leave
+  // unknown text marked so live() can fill it in asynchronously.
   function apply(root) {
-    (root || document).querySelectorAll('[data-i18n-text]').forEach(function (el) {
-      if (el.dataset.i18nTextSrc == null) el.dataset.i18nTextSrc = el.textContent;
-      el.textContent = text(el.dataset.i18nTextSrc);
+    var scope = root || document;
+    scope.querySelectorAll('[data-i18n-text]').forEach(function (el) {
+      if (el.dataset.i18nTextSrc == null) el.dataset.i18nTextSrc = el.getAttribute('data-i18n-text') || el.textContent;
+      var raw = el.dataset.i18nTextSrc;
+      var hit = isZh() ? ZH[raw] : undefined;
+      if (hit !== undefined) {
+        el.textContent = hit;
+        delete el.dataset.liveText;
+      } else {
+        el.textContent = raw;
+        el.setAttribute('data-live-text', raw);
+      }
     });
+    live(scope);
   }
 
-  window.PWCONTENT = { text: text, change: change, apply: apply };
+  // Scan a subtree and translate any marked dynamic nodes the dictionary missed.
+  // Translate in small parallel batches so a page with ~100 strings finishes in a few seconds.
+  var liveBusy = false;
+  async function live(root) {
+    if (!isZh() || !window.PWTRANSLATE || liveBusy) return;
+    var nodes = [].slice.call((root || document).querySelectorAll('[data-live-text]'))
+      .filter(function (el) { return el.dataset.liveDone !== '1' && el.getAttribute('data-live-text'); });
+    if (!nodes.length) return;
+    liveBusy = true;
+    try {
+      var BATCH = 8;
+      for (var i = 0; i < nodes.length; i += BATCH) {
+        var batch = nodes.slice(i, i + BATCH);
+        await Promise.all(batch.map(async function (el) {
+          var raw = el.getAttribute('data-live-text') || '';
+          // Skip duplicates already handled in an earlier batch or by another scan.
+          if (el.dataset.liveDone === '1') return;
+          var hit = ZH[raw];
+          var translated = hit !== undefined ? hit : await window.PWTRANSLATE.translate(raw);
+          if (translated && translated !== raw) {
+            el.textContent = translated;
+            el.dataset.liveDone = '1';
+          }
+        }));
+      }
+    } finally { liveBusy = false; }
+  }
+
+  window.PWCONTENT = { text: text, change: change, apply: apply, markup: markup, live: live };
 
   function init() { apply(); }
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init);

@@ -28,6 +28,8 @@ const stLabel = (k) => (I ? I.stability(k, (STABILITY[k] || STABILITY.unknown).l
 // tracker.json is written in English; translate its human-readable fields on the way to the DOM.
 const D = (s) => (window.PWCONTENT ? window.PWCONTENT.text(s) : s);
 const DC = (s) => (window.PWCONTENT ? window.PWCONTENT.change(s) : s);
+// Dynamic text that isn't in the dictionary gets a marker; live() translates it async.
+const L = (s) => (window.PWCONTENT ? window.PWCONTENT.markup(s) : esc(s));
 
 function ago(iso) {
   const t0 = Date.parse(iso);
@@ -341,8 +343,8 @@ function effortCard(e, rank, open) {
   const ticks = MILESTONES.slice(1, -1).map((m) => `<i style="left:${m.at}%"></i>`).join('');
   const stale = st.pushedAt && daysSince(st.pushedAt) > 3;
   const tags = [
-    e.approach && `<span class="tag">${esc(D(e.approach))}</span>`,
-    e.target && `<span class="tag ${isGtaSpecific(e) ? 'tag-gta' : ''}">${esc(D(e.target))}</span>`,
+    e.approach && `<span class="tag">${L(e.approach)}</span>`,
+    e.target && `<span class="tag ${isGtaSpecific(e) ? 'tag-gta' : ''}">${L(e.target)}</span>`,
     e.verification === 'reproduced'
       ? `<span class="tag tag-ok">${esc(t('e.reproduced', 'Independently reproduced'))}</span>`
       : `<span class="tag tag-self" title="${esc(t('e.selfTitle', "Based on the project's own README; not yet reproduced by others"))}">${esc(t('e.selfReported', 'Self-reported'))}</span>`,
@@ -357,7 +359,7 @@ function effortCard(e, rank, open) {
   }).join('');
   const claims = (e.claims || []).slice(0, 2).map((c) => {
     const m = MILESTONES.find((x) => x.key === c.milestone) || { key: c.milestone, label: c.milestone };
-    return `<div class="claim"><b>${esc(t('e.claimPre', 'Unverified claim in README:'))}</b> “${esc(D(c.text))}”${esc(t('e.claimMid', ', which may mean '))}<em>${esc(msLabel(m))}</em>${esc(t('e.claimEnd', '. Awaiting review.'))}</div>`;
+    return `<div class="claim"><b>${esc(t('e.claimPre', 'Unverified claim in README:'))}</b> “${L(c.text)}”${esc(t('e.claimMid', ', which may mean '))}<em>${esc(msLabel(m))}</em>${esc(t('e.claimEnd', '. Awaiting review.'))}</div>`;
   }).join('');
   const src = avatar(e.repo);
   return `
@@ -373,7 +375,7 @@ function effortCard(e, rank, open) {
         <div class="e-score"><b>${pct(s.score)}<span>%</span></b><small>${esc(msLabel(MILESTONES.find((m) => m.key === s.reached) || MILESTONES[0]))}</small></div>
       </div>
       <div class="tags">${tags}</div>
-      <p class="e-summary">${esc(D(e.summary))}</p>
+      <p class="e-summary">${L(e.summary)}</p>
       <div class="bar" aria-label="${esc(t('e.progressAria', '{name} progress {p} percent', { name: e.name, p: pct(s.score) }))}">
         <div class="bar-track"><div class="bar-fill" data-width="${s.score}"></div><div class="bar-ticks">${ticks}</div></div>
         <div class="ladder">${ladderCells(e)}</div>
@@ -386,8 +388,8 @@ function effortCard(e, rank, open) {
           ${e.provenOn ? `<p class="gw-proven">${esc(t('e.provenOn', 'Proven on: {x}', { x: D(e.provenOn) }))}</p>` : ''}
         </div>
         <div class="notes">
-          <div class="works"><h4>${esc(t('e.whatWorks', 'What works'))}</h4><ul>${(e.highlights || []).map((h) => `<li>${esc(D(h))}</li>`).join('')}</ul></div>
-          <div class="blocks"><h4>${esc(t('e.whatBlocking', "What's blocking"))}</h4><ul>${(e.blockers || []).map((h) => `<li>${esc(D(h))}</li>`).join('')}</ul></div>
+          <div class="works"><h4>${esc(t('e.whatWorks', 'What works'))}</h4><ul>${(e.highlights || []).map((h) => `<li>${L(h)}</li>`).join('')}</ul></div>
+          <div class="blocks"><h4>${esc(t('e.whatBlocking', "What's blocking"))}</h4><ul>${(e.blockers || []).map((h) => `<li>${L(h)}</li>`).join('')}</ul></div>
         </div>
       </div>
       <div class="e-foot">
@@ -414,8 +416,8 @@ function renderWatchlist(data) {
     <div class="w-row w-head" role="row"><span>${esc(t('watch.project', 'Project'))}</span><span>${esc(t('watch.approach', 'Approach'))}</span><span>${esc(t('watch.progress', 'Progress'))}</span><span>${esc(t('watch.stars', 'Stars'))}</span><span>${esc(t('watch.lastPush', 'Last push'))}</span></div>` +
     rows.map((e) => `
     <div class="w-row" role="row" id="effort-${esc(e.id)}">
-      <div class="w-name"><a href="${esc(repoUrl(e.repo, e.branch))}" target="_blank" rel="noopener">${esc(e.name)}</a><p>${esc(D(e.summary))}</p></div>
-      <span class="w-muted">${esc(D(e.approach))}${e.target && /gta|ps5/i.test(e.target) ? ` · ${esc(D(e.target))}` : ''}</span>
+      <div class="w-name"><a href="${esc(repoUrl(e.repo, e.branch))}" target="_blank" rel="noopener">${esc(e.name)}</a><p>${L(e.summary)}</p></div>
+      <span class="w-muted">${L(e.approach)}${e.target && /gta|ps5/i.test(e.target) ? ` · ${L(e.target)}` : ''}</span>
       <div class="w-bar"><div class="bar-track"><div class="bar-fill" data-width="${e._s.score}"></div></div><b>${pct(e._s.score)}%</b></div>
       <span class="w-muted">★ ${fmtK(e.stats?.stars)}</span>
       <span class="w-muted">${esc(ago(e.stats?.pushedAt))}</span>
@@ -426,9 +428,9 @@ function renderWatchlist(data) {
 function renderTools(tools) {
   $('#tools-list').innerHTML = tools.map((tool) => `
     <a class="tool" href="${esc(repoUrl(tool.repo))}" target="_blank" rel="noopener">
-      <span class="t-kind">${esc(D(tool.kind))}</span>
-      <h3>${esc(D(tool.name))}</h3>
-      <p>${esc(D(tool.desc))}</p>
+      <span class="t-kind">${L(tool.kind)}</span>
+      <h3>${L(tool.name)}</h3>
+      <p>${L(tool.desc)}</p>
       <span class="t-meta">★ ${fmtK(tool.stats?.stars)} · ${esc(t('tool.pushed', 'pushed {ago}', { ago: ago(tool.stats?.pushedAt) }))}</span>
     </a>`).join('');
 }
@@ -445,7 +447,7 @@ function renderInbox(data) {
     <div class="cand">
       <div>
         <b>${esc(x.repo)}</b> <span class="tag tag-self">${esc(t('inbox.unreviewed', 'Unreviewed · not linked'))}</span>
-        <p>${esc(D(x.description || t('inbox.noDesc', 'No description')))}</p>
+        <p>${L(x.description || t('inbox.noDesc', 'No description'))}</p>
         <p>${esc(t('inbox.foundVia', 'Found via {x} · {ago} · ★ {stars}', {
           x: (x.sources || [x.source]).filter(Boolean).map(D).join(', '),
           ago: ago(x.foundAt),
@@ -482,8 +484,8 @@ function renderNews(news) {
       ${storyMedia(n)}
       <div class="story-body">
         <time>${esc(fmtDay(n.date))}</time>
-        <h3>${esc(D(n.title))}</h3>
-        <p>${esc(D(n.dek))}</p>
+        <h3>${L(n.title)}</h3>
+        <p>${L(n.dek)}</p>
         ${!small && n.image?.credit ? `<span class="story-credit">${esc(t('news.image', 'Image: {credit}', { credit: D(n.image.credit) }))}</span>` : ''}
       </div>
     </a>`;
@@ -495,7 +497,7 @@ function renderNews(news) {
     list.insertAdjacentHTML('afterend', `
       <div class="headlines card">
         <h3 class="mini-title">${esc(t('news.headlines', 'Latest headlines'))} <span class="w-muted">${esc(t('news.headlinesSub', "· gathered automatically from news feeds every 3 hours"))}</span></h3>
-        <ul>${heads.map((h) => `<li><a href="${esc(safeHttp(h.link))}" target="_blank" rel="noopener noreferrer">${esc(D(h.title))}</a><span>${esc(h.outlet)} · ${esc(ago(h.date))}</span></li>`).join('')}</ul>
+        <ul>${heads.map((h) => `<li><a href="${esc(safeHttp(h.link))}" target="_blank" rel="noopener noreferrer">${L(h.title)}</a><span>${esc(h.outlet)} · ${esc(ago(h.date))}</span></li>`).join('')}</ul>
       </div>`);
   }
 
@@ -515,12 +517,12 @@ function renderNews(news) {
       ${storyMedia(n)}
       <div class="reader-inner">
         <p class="meta">${esc(catLabel(n.category))} · ${esc(fmtDay(n.date))}</p>
-        <h2 id="reader-title">${esc(D(n.title))}</h2>
-        <p class="dek">${esc(D(n.dek))}</p>
-        <div class="article">${(n.body || []).map((p) => `<p>${esc(D(p))}</p>`).join('')}</div>
+        <h2 id="reader-title">${L(n.title)}</h2>
+        <p class="dek">${L(n.dek)}</p>
+        <div class="article">${(n.body || []).map((p) => `<p>${L(p)}</p>`).join('')}</div>
         <div class="sources">
           <h4>${esc(t('news.sources', 'Sources'))}</h4>
-          <ul>${(n.sources || []).map((s) => `<li><a href="${esc(safeLink(s.url))}" ${s.url?.startsWith('#') ? '' : 'target="_blank" rel="noopener"'}>${esc(s.outlet)}: ${esc(D(s.title))}</a></li>`).join('')}</ul>
+          <ul>${(n.sources || []).map((s) => `<li><a href="${esc(safeLink(s.url))}" ${s.url?.startsWith('#') ? '' : 'target="_blank" rel="noopener"'}>${esc(s.outlet)}: ${L(s.title)}</a></li>`).join('')}</ul>
           <p class="fine">${credit ? esc(t('news.imagePre', 'Image: ')) + credit + esc(t('news.imageEnd', '. ')) : ''}${esc(n.by === 'claude' ? t('news.byClaude', 'Written automatically by Claude from the linked sources.') : t('news.bySite', 'Written by PortWatch from the linked sources.'))}${page ? ` <a href="${esc(page)}">${esc(t('news.linkArticle', 'Link to this article'))}</a>` : ''}</p>
         </div>
       </div>`;
@@ -535,7 +537,7 @@ function renderNews(news) {
 /* ---------- Safety ---------- */
 function renderFlags(flags) {
   $('#flag-list').innerHTML = flags.map((f) => `
-    <li><b>${esc(D(f.pattern))}<span>${esc(f.members?.length ? t('flags.seen', '{n} seen', { n: f.members.length }) : D(f.label || ''))}</span></b><p>${esc(D(f.reason))}</p></li>`).join('');
+    <li><b>${L(f.pattern)}<span>${esc(f.members?.length ? t('flags.seen', '{n} seen', { n: f.members.length }) : D(f.label || ''))}</span></b><p>${L(f.reason)}</p></li>`).join('');
 }
 
 /* ---------- Method ---------- */
@@ -659,3 +661,13 @@ function relabel() {
   observeBars();
 }
 document.addEventListener('pw:lang', relabel);
+
+/* Live-translate dynamic text nodes as they are rendered (see i18n-content.js). */
+if (window.PWCONTENT && window.PWCONTENT.live) {
+  var liveObserver = new MutationObserver(function () {
+    if (document.documentElement.lang !== 'zh-CN') return;
+    window.PWCONTENT.live(document);
+  });
+  liveObserver.observe(document.body, { childList: true, subtree: true });
+  window.PWCONTENT.live(document);
+}

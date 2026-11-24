@@ -64,7 +64,12 @@ The hero shows an original sunset illustration until you add a photo. To use off
 
 The site runs in Chinese by default and switches to English from the 中文/EN button in the navigation bar (next to the theme picker). The choice is stored in `localStorage` under `pw-lang`, and `?lang=en` or `?lang=zh` on any URL forces one for a link you want to share.
 
-Interface copy lives in `assets/js/i18n.js`. Text that comes from `data/tracker.json` — project summaries, highlights, blockers, news headlines and bodies, the change feed, tools and flags — is translated by `assets/js/i18n-content.js`, which is loaded by the tracker, the board and every generated article page. Add a `"English text": "中文"` entry there whenever the scout writes a new phrase; strings without an entry fall back to the original English. The "Scout spotted …" change lines are translated from a template, so they need no entries. User-written board posts are never translated.
+Interface copy lives in `assets/js/i18n.js`. Text that comes from `data/tracker.json` — project summaries, highlights, blockers, news headlines and bodies, the change feed, tools and flags — is translated dynamically by `assets/js/translate.js`:
+
+- `assets/js/i18n-content.js` holds a small dictionary of reviewer-checked translations (technical terms, common phrases). A dictionary hit is instant and preferred. The "Scout spotted …" change lines are translated from a template, so they need no entry.
+- Anything not in the dictionary is translated on the fly by `assets/js/translate.js`, which calls Bilibili's free Index-Translate endpoint and falls back to MyMemory's public API. No API key is needed. Translations are cached in `localStorage` (key `pw-tr-cache-v1`, newest 600 entries), so each sentence is only translated once. If both services fail, the original English is shown instead of breaking the page.
+- This means new scout data is translated automatically on the next visit — no dictionary update required after every data refresh.
+- User-written board posts are never translated.
 
 ## Local preview
 
