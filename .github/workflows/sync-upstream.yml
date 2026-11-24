@@ -1,0 +1,69 @@
+name: Sync upstream data
+
+# The Chinese site is a translation layer on top of the English project: every data file it shows
+# comes from 4lwayz/portwatch-vi. This workflow mirrors the upstream tracker.json into this repo,
+# so the site never shows a stale snapshot (upstream refreshes it every 3 hours and its editor
+# reviews it daily). The commit triggers "Deploy site", which rebuilds the article pages too.
+
+on:
+  schedule:
+    - cron: '*/10 * * * *' # every 10 minutes; upstream only changes every few hours, so this is cheap
+  workflow_dispatch: {}
+
+permissions:
+  contents: write
+
+concurrency:
+  group: sync-upstream
+  cancel-in-progress: false
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Fetch upstream tracker.json
+        run: |
+          curl -sSfL --retry 3 --max-time 60 \
+            -H 'Accept: application/vnd.github.raw' \
+            -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" \
+            'https://api.github.com/repos/4lwayz/portwatch-vi/contents/data/tracker.json' \
+            -o /tmp/upstream-tracker.json
+          node -e "JSON.parse(require('fs').readFileSync('/tmp/upstream-tracker.json','utf8'));console.log('upstream tracker.json is valid JSON')"
+
+      - name: Commit when it differs
+        run: |
+          if cmp -s data/tracker.json /tmp/upstream-tracker.json; then
+            echo "Already in sync with upstream."
+            exit 0
+          fi
+          node -e "
+            const fs=require('fs');
+            const a=JSON.parse(fs.readFileSync('/tmp/upstream-tracker.json','utf8'));
+            const b=JSON.parse(fs.readFileSync('data/tracker.json','utf8'));
+            console.log('upstream updated', a.updated, '| local was', b.updated);
+            console.log('upstream efforts', a.efforts.length, 'news', a.news.length, 'changes', (a.changes||[]).length);
+          "
+          cp /tmp/upstream-tracker.json data/tracker.json
+          git config user.name 'upstream-sync[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add data/tracker.json
+          git commit -m "sync: upstream tracker data $(date -u '+%F %H:%M') UTC"
+
+      # The upstream scout writes to the same repo on its own schedule, so a push can lose a race.
+      name: Push
+        run: |
+          if git diff --cached --quiet; then echo "Nothing to push."; exit 0; fi
+          for attempt in 1 2 3 4; do
+            if git pull --rebase --autostash origin main && git push origin main; then
+              echo "Pushed upstream data."
+              exit 0
+            fi
+            echo "Push attempt $attempt failed; retrying."
+            sleep 5
+          done
+          echo "::warning::Could not push the upstream data after 4 attempts."
